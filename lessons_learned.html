@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>לקחים — למידה והדרכה 146</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0f1117;
+    --card: #242938;
+    --section: #1a1f2e;
+    --gold: #c9a84c;
+    --blue: #4a90d9;
+    --text: #e8eaf0;
+    --text-sec: #8b90a0;
+    --border: #2d3348;
+    --success: #4caf7d;
+    --warning: #e8a020;
+    --danger: #e05252;
+    --purple: #9b59b6;
+    --amber: #d4a017;
+  }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', 'Arial Hebrew', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    direction: rtl;
+  }
+  .header {
+    background: linear-gradient(135deg, #1a1f2e 0%, #0f1117 60%, #1a1728 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 32px 24px 24px;
+    text-align: center;
+  }
+  .header-badge {
+    display: inline-block;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .header h1 { font-size: clamp(22px, 4vw, 34px); font-weight: 800; color: var(--text); margin-bottom: 6px; }
+  .header h1 span { color: var(--gold); }
+  .header-meta { color: var(--text-sec); font-size: 13px; margin-top: 8px; }
+  .stats-strip { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--border); background: var(--section); }
+  .stat { flex: 1 1 140px; text-align: center; padding: 16px 12px; border-left: 1px solid var(--border); }
+  .stat:last-child { border-left: none; }
+  .stat-num { font-size: 28px; font-weight: 800; color: var(--gold); display: block; }
+  .stat-label { font-size: 11px; color: var(--text-sec); text-transform: uppercase; letter-spacing: 1px; }
+  .filter-bar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,17,23,0.97); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  }
+  .filter-bar input {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); padding: 7px 14px; border-radius: 20px;
+    font-size: 13px; outline: none; min-width: 200px; direction: rtl;
+  }
+  .filter-bar input:focus { border-color: var(--blue); }
+  .pill {
+    display: inline-block; padding: 5px 13px; border-radius: 20px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    border: 1px solid transparent; transition: all 0.2s; user-select: none;
+  }
+  .pill:hover { opacity: 0.85; transform: translateY(-1px); }
+  .pill-all { background: var(--gold); color: #1a1200; border-color: var(--gold); }
+  .pill-tactics { background: #1e3a5f; color: #6ab0f5; border-color: #6ab0f5; }
+  .pill-safety { background: #1e3a22; color: #6af593; border-color: #6af593; }
+  .pill-urban { background: #2d1e3a; color: #c06af5; border-color: #c06af5; }
+  .pill-medical { background: #3a2a1e; color: #f5c06a; border-color: #f5c06a; }
+  .pill-tech { background: #1e2e3a; color: #6ae5f5; border-color: #6ae5f5; }
+  .pill-ethics { background: #3a1e2a; color: #f56aa0; border-color: #f56aa0; }
+  .pill-intel { background: #3a341e; color: #f5e06a; border-color: #f5e06a; }
+  .pill-prep { background: #1e3a34; color: #6af5e0; border-color: #6af5e0; }
+  .main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 60px; }
+  .topic-section {
+    background: var(--section); border: 1px solid var(--border);
+    border-radius: 12px; margin-bottom: 24px; overflow: hidden; transition: box-shadow 0.2s;
+  }
+  .topic-section:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+  .topic-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; cursor: pointer; border-bottom: 1px solid var(--border); user-select: none;
+  }
+  .topic-header:hover { background: rgba(255,255,255,0.03); }
+  .topic-title { display: flex; align-items: center; gap: 12px; font-size: 17px; font-weight: 700; }
+  .topic-count { background: rgba(201,168,76,0.2); color: var(--gold); font-size: 12px; padding: 2px 9px; border-radius: 10px; font-weight: 600; }
+  .topic-toggle { color: var(--text-sec); font-size: 20px; transition: transform 0.3s; }
+  .topic-body.collapsed { display: none; }
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; padding: 16px; }
+  .lesson-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .lesson-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
+  .lesson-card.hidden { display: none; }
+  .card-head { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
+  .card-num-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .card-num { background: rgba(74,144,217,0.2); color: var(--blue); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+  .card-ethics-flag { background: rgba(224,82,82,0.2); color: var(--danger); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+  .card-osint-flag { background: rgba(76,175,125,0.2); color: var(--success); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+  .card-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .card-badges { display: flex; flex-wrap: wrap; gap: 5px; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .card-expand-btn {
+    width: 100%; background: rgba(74,144,217,0.08); border: none;
+    color: var(--blue); cursor: pointer; padding: 8px; font-size: 12px; font-weight: 600;
+    transition: background 0.2s; text-align: center; direction: rtl; font-family: inherit;
+  }
+  .card-expand-btn:hover { background: rgba(74,144,217,0.18); }
+  .chain { padding: 14px 16px; display: none; }
+  .chain.open { display: block; }
+  .chain-step { border-radius: 8px; padding: 10px 14px; margin-bottom: 6px; font-size: 13px; }
+  .chain-step-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .step-obs { background: rgba(74,144,217,0.12); border-right: 3px solid var(--blue); }
+  .step-obs .chain-step-label { color: var(--blue); }
+  .step-analysis { background: rgba(212,160,23,0.1); border-right: 3px solid var(--amber); }
+  .step-analysis .chain-step-label { color: var(--amber); }
+  .step-conclusion { background: rgba(201,168,76,0.1); border-right: 3px solid var(--gold); }
+  .step-conclusion .chain-step-label { color: var(--gold); }
+  .step-apply { background: rgba(76,175,125,0.1); border-right: 3px solid var(--success); }
+  .step-apply .chain-step-label { color: var(--success); }
+  .step-protocol { background: rgba(155,89,182,0.1); border-right: 3px solid var(--purple); }
+  .step-protocol .chain-step-label { color: var(--purple); }
+  .chain-arrow { text-align: center; color: var(--text-sec); font-size: 16px; margin: 3px 0; }
+  .source-quote { background: rgba(255,255,255,0.03); border-right: 3px solid var(--text-sec); border-radius: 6px; padding: 10px 14px; margin: 10px 0 4px; font-size: 12px; color: var(--text-sec); font-style: italic; }
+  .source-quote-label { font-size: 10px; color: var(--text-sec); font-weight: 700; margin-bottom: 4px; font-style: normal; }
+  .ethics-warning { background: rgba(224,82,82,0.1); border: 1px solid rgba(224,82,82,0.4); border-radius: 8px; padding: 10px 14px; margin-top: 10px; font-size: 12px; color: #f5a0a0; }
+  .ethics-warning-title { font-weight: 700; color: var(--danger); margin-bottom: 4px; }
+  .sources-section { background: var(--section); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+  .sources-section h2 { color: var(--gold); font-size: 18px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .source-doc { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
+  .source-doc h3 { color: var(--blue); font-size: 14px; margin-bottom: 6px; }
+  .source-doc p { font-size: 13px; color: var(--text-sec); }
+  .source-doc ul { margin: 8px 0 0 0; padding-right: 18px; font-size: 13px; color: var(--text-sec); }
+  .source-doc li { margin-bottom: 4px; }
+  footer { text-align: center; color: var(--text-sec); font-size: 12px; padding: 24px; border-top: 1px solid var(--border); }
+  footer span { color: var(--gold); }
+  .no-results { text-align: center; color: var(--text-sec); padding: 40px; display: none; }
+  .no-results.show { display: block; }
+  @media (max-width: 600px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .stats-strip { flex-direction: column; }
+    .stat { border-left: none; border-bottom: 1px solid var(--border); }
+    .filter-bar input { min-width: 150px; flex: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-badge">מסמך למידה מבצעית</div>
+  <h1>לקחים — <span>למידה והדרכה 146</span></h1>
+  <div class="header-meta">טווח תאריכים: 01.07.2024 — 28.03.2026 &nbsp;|&nbsp; נוצר: 29.03.2026</div>
+</div>
+
+<div class="stats-strip">
+  <div class="stat"><span class="stat-num">947</span><span class="stat-label">הודעות שנותחו</span></div>
+  <div class="stat"><span class="stat-num">29</span><span class="stat-label">לקחים שחולצו</span></div>
+  <div class="stat"><span class="stat-num">9</span><span class="stat-label">נושאים</span></div>
+  <div class="stat"><span class="stat-num">6</span><span class="stat-label">מקורות OSINT</span></div>
+</div>
+
+<div class="filter-bar">
+  <input type="text" id="searchInput" placeholder="חיפוש לקח... (Ctrl+F)" />
+  <span class="pill pill-all active" data-topic="all">הכל</span>
+  <span class="pill pill-tactics" data-topic="tactics">טקטיקה ותרגול</span>
+  <span class="pill pill-safety" data-topic="safety">בטיחות ומניעת תאונות</span>
+  <span class="pill pill-urban" data-topic="urban">לחימה עירונית</span>
+  <span class="pill pill-medical" data-topic="medical">כושר קרבי ועזרה ראשונה</span>
+  <span class="pill pill-tech" data-topic="tech">טכנולוגיה ומערכות</span>
+  <span class="pill pill-ethics" data-topic="ethics">אתיקה ודיני לחימה</span>
+  <span class="pill pill-intel" data-topic="intel">מודיעין ומצב שטח</span>
+  <span class="pill pill-prep" data-topic="prep">הכנה ותדרוך</span>
+</div>
+
+<div class="main">
+<div class="no-results" id="noResults">לא נמצאו לקחים התואמים את החיפוש</div>
+
+<!-- SECTION: בטיחות -->
+<div class="topic-section" data-topic="safety">
+  <div class="topic-header" onclick="toggleSection(this)">
+    <div class="topic-title"><span>🛡</span> בטיחות ומניעת תאונות <span class="topic-count">7 לקחים</span></div>
+    <span class="topic-toggle">▾</span>
+  </div>
+  <div class="topic-body">
+    <div class="cards-grid">
+
+      <div class="lesson-card" data-topics="safety" data-text="גנרטור חנקן פחמן מוות לוחמים שינה">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#1</span></div>
+          <div class="card-title">גנרטור בחדר — פחמן חד-חמצני קטלני</div>
+          <div class="card-badges"><span class="badge pill-safety">בטיחות</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            שלושה לוחמים ישנו עם גנרטור בחדר. ב-05:45 נמצאו עם סימני מצוקה — נקבע מוות של אחד ושני לוחמים מפונים לבי"ח. (סיירת גבעתי, רפיח, 25.7.24)
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            הלוחמים הוזהרו אך לא פעלו — ככל הנראה רצו להפעיל מזגן נייד. חוסר הבנה של סכנת פחמן חד-חמצני: אין ריח, אין עשן — יש מוות.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            פליטת גזי גנרטור בחלל סגור = גורם מוות מיידי. אין להפעיל גנרטור בתוך מבנה בשום מצב, גם לא בחלקו.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            לבצע מסדר גנרטורים לכל הכוחות — מיקום, הפעלה, כללי בטיחות. לפרסם מנשר. מפקדים: לאמת בתדריך מוצב.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מנשר "פליטת גזים יכולה להיות קטלנית" (26.7.24). כרך בטיחות — איסור הפעלת מנועי בעירה פנימית בחלל סגור.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 25.7.24, +972 53-774-1185:</div>
+            "שלושה לוחמים הולכים לישון עם גנרטור בחדר... ב5:45 נכנסים להעיר אותם... ולצערנו הרב קבענו מוות של אחד בנקודה ושתי לוחמים מפונים... נחדד ונבצע מסדרים לאור ריבוי הגנרטורים שמפוזרים אצל הכוחות."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="safety" data-text="יתד טיל הפוך מדבקה עברית כיוון שגוי">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#2</span></div>
+          <div class="card-title">טיל יתד שוגר הפוך — כשל מדבקת כיוון</div>
+          <div class="card-badges"><span class="badge pill-safety">בטיחות</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            חייל בגדסר ירה טיל יתד הפוך. בנס אין נפגעים. מתחקיר ראשוני: המדבקה בעברית הודבקה בניגוד לכיוון הנכון. (20.8.24)
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            מדבקת הכיוון הודבקה בטעות הפוך — כשל בבקרת איכות. אין נוהל בדיקה חובה לפני שיגור; סמיכה על מדבקה בלבד.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            לפני שיגור כל אמל"ח — בדיקת כיוון ופינוי עורפי מקצה לקצה. אין לסמוך על מדבקה בלבד — נדרש אימות תפעולי ידני.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            להפיץ בדחיפות סרטון הסבר מפורט לתפעול יתד. לבצע הדגמה חיה בכל יחידה. לאמן: תמיד לבדוק כיוון ידנית.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            סרטון הסבר מפורט לתפעול יתד (20.8.24). הוראות בטיחות אמל"ח נגד-שריון — בדיקה לפני שיגור.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 20.8.24, +972 52-924-0500:</div>
+            "שימו לב חייל בגדסר ירה טיל יתד הפוך! בנס אין נפגעים. מתחקיר ראשוני עולה שהמדבקה בעברית הודבקה בניגוד לכיוון הנכון. תעבירו בדחיפות לכל הכוחות."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="safety" data-text="קנה m16 התפוצץ תחמושת לא תקינה שימון">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#3</span></div>
+          <div class="card-title">התפוצצות קנה M16 — תחמושת ותחזוקה לקויה</div>
+          <div class="card-badges"><span class="badge pill-safety">בטיחות</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            מטווח 4, חטמ"ר שומרון, 22.1.25 — התפוצץ קנה M16, הנשק התפרק לשני חלקים, חייל נפצע בזרועו. תחמושת אימונים מאלת; חייל ניקה ושימן 6 ימים קודם.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            בדיקה העלתה: תחמושת לא תקינה, קנה מלוכלך, או שימון יתר. חוטר לבד אינו מוצא לכלוך דק. תחמושת ממוצאים שונים לא נבדקה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            חוטר עם פלנלית הכרחי לבדיקת ניקיון קנה לפני שימוש. שימון יתר = סיכון. תחמושת ממוצאים שונים מחייבת בדיקה מוקדמת.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            להעביר חוטר עם פלנלית בכל ערכת נשק (לא רק תרמיל). לבצע בדיקת חוטר לפני כל מקצה. לבדוק תחמושת אימונים לפני הפצה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            נוהל 270 — נשיאת נשק אישי (הוארך עד סוף 2025). הוראות ניקוי ותחזוקת נשק. בדיקת תחמושת לפני שימוש.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 22.1.25, יאיר ק. למידה 146:</div>
+            "יש להעביר חוטר עם פלנלית בשביל לכסות מקרים של לכלוך בקנה ולא רק תרמיל או קליע כלואים."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="safety medical" data-text="משקפי מגן ג'נטקס עיניים רסיסים ציוד מיגון">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#4</span></div>
+          <div class="card-title">ציוד מיגון עיניים — הבדל בין ראייה ועיוורון</div>
+          <div class="card-badges"><span class="badge pill-safety">בטיחות</span><span class="badge pill-medical">רפואה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            ירי נ"ט על טנק בנצרים, 25.12.24. מ"מ וטען עמדו שניהם במדף. המ"מ חבש ג'נטקס רכוס ומשקפי אבק — ראייתו ניצלה. הטען לא חבש — רופאי סורוקה נלחמים על הצלת ראייתו.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            שני חיילים, אותו אירוע, אותם רסיסים — ההבדל היחיד: לבישת ציוד מיגון. הטען ידע על הציוד ובחר שלא לחבוש. אי-נוחות נתפסת כגדולה מהסיכון.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            ג'נטקס ומשקפי מגן מצילים עיניים. אי-נוחות אינה הצדקה. דרושה אכיפה מלמעלה — לא רק מודעות.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            מפקדים: לוודא לבישת ציוד מיגון עיניים לפני עלייה לעמדה. לכלול בתדריך: ג'נטקס רכוס, משקפי אבק רכוסים. לתחקר אירועים של חיילים ללא ציוד.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            לקחי רפואה מתחקיר אגוז (7.10.24): "פצועים רבים לא השתמשו במשקפי מגן בגלל אי נוחות — למרות שהשימוש אפשרי עם אמרל."
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 25.12.24, יאיר ק. למידה 146:</div>
+            "המ'מ הקפיד על ג'נטקס רכוס והדוק, וחבישת משקפי אבק תקניות. ראייתו ניצלה ללא פגיעה כלל. הטען לא חבש למרות שהיו לו גם משקפי אבק וגם משקפי מגן איתו בטנק."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="safety prep" data-text="צפע נ'א חי'ר הוראה עדכון בטיחות רימון חלל סגור">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#5</span></div>
+          <div class="card-title">עדכון הוראות בטיחות — צפע נ"א, רימונים, נוהל 270</div>
+          <div class="card-badges"><span class="badge pill-safety">בטיחות</span><span class="badge pill-prep">הכנה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            עדכוני ספרות בטיחות הופצו (6.3.25): הוראה 6.6 עודכנה — צפע נ"א חי"ר; הוראה 7.3 רימונים; נוהל 270 הוארך. שאלה בקבוצה על תפעול צפע חי"ר חשפה חוסר ידע.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            שינויים בהוראות בטיחות אינם מגיעים לדרגים הנמוכים. קציני למידה הם הצינור הקריטי — אם הם לא מכירים, החיילים בוודאי לא.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            כל עדכון הוראה מחייב רענון מיידי לכל הדרגים. איסור הפעלת צפע בחלל סגור / במבנה — חייב להיות ידוע לכל מפעיל.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            קציני למידה: להפיץ ולתדרך הוראה 6.6 מעודכנת. לכלול בתדריך: איסור עבודה בחלל סגור, הפעלה ראשונה רק בחניכת מפקד מיומן.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            הוראה 6.6 כרך ד' — צפע נ"א חי"ר. הוראה 7.3 כרך א' — רימונים. נוהל 270 — נשיאת נשק אישי. נוהל 100 (עודכן).
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 6.3.25, +972 52-925-1129:</div>
+            "הוראה 6.6 — צפע נ'א חי'ר בכרך ד' עודכנה: איסור עבודה בחלל סגור, במבנה או בסמוך לריכוז חיילים. איסור ביצוע היערכות מקדימה להכנת האמצעי בתוך מבנים. הפעלה ראשונה תיעשה בחניכת מפקד מיומן."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="safety urban" data-text="רימון עשן נפיץ שאגה הכרזה ריקושטים משקפי מגן שטח בנוי מאג נגב">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#19</span></div>
+          <div class="card-title">הכרזת סוג רימון + ריקושטים בשטח בנוי</div>
+          <div class="card-badges"><span class="badge pill-safety">בטיחות</span><span class="badge pill-urban">לחימה עירונית</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            8.7.24: זוהו שני ליקויים חוזרים בקרב כוחות בשטח בנוי: (א) רימונים נזרקים ללא הכרזת סוג — חיילים לא יודעים להיכנס לחסות. (ב) צרור מאג/נגב בחדרים הרוסים מייצר ריקושטים על הכוח עצמו.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            בלחץ קרב, הכרזה מילולית מדויקת נשמטת. חיילים אינם מודעים לסכנת ריקושטים מצרור בחדר הרוס. ציוד מגן אינו נלבש גם כשהסכנה גבוהה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            כל רימון = הכרזה חובה: "רימון!" (נפיץ) או "עשן!" + תפיסת מחסה של הכל. בשטח בנוי/הרוס — צרור קצר ממאג/נגב מייצר ריקושטים קטלניים. משקפי מגן — חובה בכניסה לכל מבנה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            (1) לתרגל הכרזת רימון בכל אימון קרב עירוני. (2) לקבוע: "רימון!" / "עשן!" — לכל רימון ללא יוצא מן הכלל. (3) לחבוש משקפי מגן בכניסה לכל מבנה. (4) בחדר הרוס — ירי בפרץ קצר בלבד.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מידע 153 (8.7.24). הוראה 7.3 — שימוש ברימונים. כרך לחימה בשטח בנוי.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 8.7.24, אלעד לוי:</div>
+            "רימון — האם עשן או נפיץ? חייב להיות מלווה בשאגה: 'רימון!' - ותפיסת מחסות של כולם. או: 'עשן!'. שומר-אחי — משקפי-מגן — בשטח בנוי/הרוס, צרור מאג או נגב מייצר ריקושטים על עצמנו."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="safety prep" data-text="פליטת כדור תאונת דרכים מנהלה בטיחות שגרה תדריך מוצב">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#20</span></div>
+          <div class="card-title">2 פליטות + 5 תאונות בחודש — בטיחות גם בשגרה</div>
+          <div class="card-badges"><span class="badge pill-safety">בטיחות</span><span class="badge pill-prep">הכנה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            אוקטובר 2024: בחודש אחד נרשמו 2 פליטות כדור ו-5 תאונות דרכים באוגדה האורגאנית. הדיווח קרא לשלב תזכורות בטיחות בתדריכי מוצב, בהעמ"צ ובתדריכי משימות מנהלה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            תקופות שגרה יוצרות "ביטחון שגוי" שמרפה משמעת. עייפות מבצעית מפחיתה ערנות לבטיחות בסיסית. תאונות ופליטות מתרחשות בתקופות ה"שקטות" לא פחות מבקרב.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            בטיחות נשק ובטיחות כביש דורשות תשומת לב פעילה גם בפעילות שגרתית. תדרוך בטיחות = חובה בכל מסגרת, כולל מנהלות.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            (1) לכלול תזכורת בטיחות בתדריך מוצב יומי. (2) לשלב בהעמ"צ/שיחות מפקדים. (3) להדגיש בתדריך לפני כל משימת מנהלה: בטיחות נשק + בטיחות כביש.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            נוהל 270 — נשיאת נשק אישי. תקנות תנועה צבאיות. הנחיות בטיחות לפעילות שגרתית.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 6.10.24, יאיר ק. למידה 146:</div>
+            "2 פליטות כדור ו-5 תאונות דרכים באוגדה האורגאנית שלנו בחודש האחרון... להגיד מילה בתדריך מוצב, לשלב בהעמ'צ/שיחות מפקדים, להדגיש בתדריך למשימות מנהלה."
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: טקטיקה -->
+<div class="topic-section" data-topic="tactics">
+  <div class="topic-header" onclick="toggleSection(this)">
+    <div class="topic-title"><span>⚔</span> טקטיקה ותרגול <span class="topic-count">5 לקחים</span></div>
+    <span class="topic-toggle">▾</span>
+  </div>
+  <div class="topic-body">
+    <div class="cards-grid">
+
+      <div class="lesson-card" data-topics="tactics" data-text="עמדות זמן חשיפה 12 שניות נ'ט פתיחה באש">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#6</span></div>
+          <div class="card-title">עלייה לעמדות — זמני חשיפה ואישורי ירי</div>
+          <div class="card-badges"><span class="badge pill-tactics">טקטיקה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            אירוע נ"ט ויירוט מעיל רוח, גדוד 71, 18.7.24: גינס וטנק עלו לעמדות ללא הנחיה מפורטת ובלי חידוד הוראות פ"א. גינס עלה 4 פעמים — פעם ראשונה 30 שניות. טנק — 20 שניות. לא אושר ירי. מ"מ נפגע מרסיסים מחוץ למדף — טיל יורט.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            עמדה ראשונה ארוכה מדי — נתנה לאויב זמן מיקוד. חוסר הוראות פ"א ברורות לפני העלייה. חוסר תיאום צמד בצפע זהה — חשיפה כפולה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            עלייה לעמדות מול מופלל — רק עם הוראות פ"א ברורות מראש. זמן בעמדה: לא יעלה על 12 שניות. לא לעלות בצמד לאותו צפע נ"ט.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            1. לוודא הוראות פ"א לפני עלייה לסריקת מופלל. 2. לחדד: לא יותר מ-12 שניות בעמדה. 3. לתרגל עלייה בצמד. 4. אל"ל מלא"ר/גינס לכל צוות שעולה לגזרה. 5. שיעור הפעלת טנקים בכל עלייה של חטיבה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            8 לקחים רשמיים מתחקיר מ"מ ריגלר (21.7.24). כרך לחימה בשריון — זמני חשיפה. נוהל עמדות צמד.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 21.7.24, יאיר ק. למידה 146:</div>
+            "לקחים: 1. עליה לעמדות לביצוע סריקת איתור מופלל צריכה להתבצע רק בהינתן הוראות פתיחה באש ברורות ע'י מפקד גזרה. 2. עליה לעמדות תתבצע לא יותר מ12 שניות בעמדה. 3. לוודא שעלייה בצמד לא נעשית באותו צפע נ'ט."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="tactics prep" data-text="מוצב קו רקיע חשיפה עמדות נסתרות תדרוך">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#7</span></div>
+          <div class="card-title">פעילות במוצב — חשיפה על קו רקיע</div>
+          <div class="card-badges"><span class="badge pill-tactics">טקטיקה</span><span class="badge pill-prep">הכנה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            סרטון חזבאללה (3.9.26) מציג חייל שעלה על קו רקיע במוצב ונפגע. ינון זלכה מנתח: "צריך לעשות הכל כדי שדברים כאלו לא יקרו שוב."
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            פעילות שגרתית במוצב (גג, מרפסת, חומה) נתפסת כ"לא-מבצעית" ומבוצעת ללא תדרוך. האויב עוקב באופן מתמיד ומנצל חשיפות לא-מוכרות.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            כל פעילות באזור מסוכן במוצב = משימה מבצעית. יש לתדרך, להציב תצפיות, לנוע שפוף/בזחילה, ולמזער זמן חשיפה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            1. להסביר מחדש על האיומים לכל הכוחות. 2. למקם עמדות נסתרות, לא על קו רקיע. 3. כל עלייה מעל קו רקיע: תדרוך + תצפיות + חיפויים + מיסוך + לוח זמנים מינימלי. 4. לשקול: אישור רמה ממונה לפעילות בשטח מסוכן.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מידע 153 (8.7.24): "שבירת שגרה. ניתוח עמדות אפשריות לצלף. מניעת חשיפה — הסתרת חלון מבעוד לילה." צלף — סעיף 3 במסמך.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 9.3.26, ינון זלכה ק. למידה 146:</div>
+            "1. להסביר שוב חשוב על האיומים! למידה והדרכה, למידה והדרכה. 2. למקם עמדות נסתרות, ולא על קו רקיע. 3. במידה ויש לעלות מעבר לקו רקיע — יש להתייחס לכך כמשימה מבצעית: א. לתדרך קודם. ב. להציב תצפיות. ג. למקם חיפויים. ד. לתכנן ציר תנועה."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="tactics" data-text="תנועה רווחים שליש שני שליש נגד נ'ט מידרון">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#8</span></div>
+          <div class="card-title">תנועה בשטח — רווחים ונוהל שליש/שני-שליש</div>
+          <div class="card-badges"><span class="badge pill-tactics">טקטיקה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            מידע 223 א', ינון זלכה, 26.10.24: "נראה שצריך יותר רווחים! צריך לחזור לנוהלי התנועה 'שליש/2שליש'." וכן: "גם במידרון אחורי נחשפים — אז פיזור, הסוואה, מחסות/שוחות."
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            בתנועה רציפה — טיל נ"ט יכול לפגוע בריכוז. המידרון האחורי נחשב "מוגן" בטעות. ריכוז חיילים = מטרה אטרקטיבית.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            נוהל שליש/שני-שליש (רוב באבטחה, מעט נעים) חוסך חיים. פיזור ורווחים בתנועה — גם בשטח "מוגן" ובמידרון אחורי.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            לרענן נוהל שליש/שני-שליש בתדרוך ובאימון. לחדד: מידרון אחורי לא בטוח. לוודא פיזור בתנועה בשטח חשוף.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            כרך לחימה ברגל — תנועה בשטח, נוהל פיזור וכיסוי. מידע 223 א' — תמונות קרב, אוגדה 146 (26.10.24).
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 26.10.24, ינון זלכה ק. למידה 146:</div>
+            "ג. וכן — צריך לחזור לנוהלי התנועה 'שליש/2שליש' — של רוב באבטחה ומעט נעים, ולא תנועה רציפה. 2. נגד נ'ט — גם במידרון אחורי נחשפים! — אז פיזור, הסוואה, מחסות/שוחות."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="tactics intel" data-text="טור לוגיסטי נ'ט תמ'ס חיזבאללה קורנט אספקה קונבוי מטרה">
+        <div class="card-head">
+          <div class="card-num-row">
+            <span class="card-num">#21</span>
+            <span class="card-osint-flag">OSINT</span>
+          </div>
+          <div class="card-title">אש נ"ט על טור לוגיסטי — הקונבוי הוא מטרה מבצעית</div>
+          <div class="card-badges"><span class="badge pill-tactics">טקטיקה</span><span class="badge pill-intel">מודיעין</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            28.10.24: חיזבאללה פרסם סרטון המציג ירי תמ"ס לעבר טור כלים צה"לי שזוהה באזור טייבה ורב-תלתין. הסרטון הופץ ללמידה מבצעית.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            טורים לוגיסטיים — איטיים, צפויים ופחות מאובזרים בהגנה — מהווים מטרה קלה ובעלת ערך גבוה לאש נ"ט. תנועת אספקה שגרתית יוצרת תבנית צפויה לצופה האויב.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            משימת לוגיסטיקה = משימה מבצעית. יש להחיל פרוטוקולי הגנה מנ"ט על טורים: רווחים, ציר מגוון, תזמון משתנה, תנועה מהירה בנקודות חשיפה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            (1) לתדרך: כל טור לוגיסטי = עסק מבצעי — להחיל כללי הגנה מנ"ט. (2) לשנות תזמון ומסלול אספקה. (3) לשמור על רווחים גדולים בין כלים. (4) לעבור נקודות חשיפה בזריזות.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מידעון אמל"ח צפוני — איום נ"ט. נוהל תנועה בטורים בסביבה מאוימת. מבזק "איום המטענים פצן" (30.9.24).
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 28.10.24, יאיר ק. למידה 146:</div>
+            "סרטון חזבאללה, הפעלת אש תמ'ס לעבר טור כלים שמזוהה באזור טייבה ורב-תלתין"
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="tactics safety" data-text="אש ידידותית מרגמה גולני הרוג פצועים תיאום אש תנ'ק כשל">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#22</span></div>
+          <div class="card-title">אש ידידותית — מרגמות גולני, הרוג ופצועים (לבנון)</div>
+          <div class="card-badges"><span class="badge pill-tactics">טקטיקה</span><span class="badge pill-safety">בטיחות</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            25.11.24 (לבנון): צוות מרגמות של גולני ספג אש ידידותית מהיחס"מ שלו עצמו — הרוג אחד ומספר פצועים. הדיווח אומת לאחר פרסום סרטון חיזבאללה שחשף את הזירה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            ירי עקיף (מרגמה) מחייב תיאום מדויק עם מיקומי כוחות ידידותיים. כשל בתיאום בין מפעיל המרגמה לכוח הנמצא בשטח יצר ירי על כוח ידידותי.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            ירי עקיף ללא אימות מיקומי כוחות = סכנת אש ידידותית ממשית. פרוטוקולי תיאום אש הם חובה לפני כל ירי — גם בלחץ מבצעי מלא.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            (1) לאמת מיקומי כוחות ידידותיים לפני כל ירי עקיף. (2) להחיל פרוטוקול תיאום אש מחמיר — גם בלחץ. (3) לתרגל תיאום בין צוות מרגמה לכוחות בשטח בכל אימון.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            נוהל ירי עקיף — אימות מיקומי כוחות. כרך תיאום אש — SMCT. בדיקות "תיאום אש" לפני ירי מרגמה.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 25.11.24, יאיר ק. למידה 146:</div>
+            "כן, זה מתווה על צוות מרגמות של גולני שבו יש הרוג ופצועים מהיחס''מ שלהם"
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: לחימה עירונית -->
+<div class="topic-section" data-topic="urban">
+  <div class="topic-header" onclick="toggleSection(this)">
+    <div class="topic-title"><span>🏙</span> לחימה עירונית <span class="topic-count">2 לקחים</span></div>
+    <span class="topic-toggle">▾</span>
+  </div>
+  <div class="topic-body">
+    <div class="cards-grid">
+
+      <div class="lesson-card" data-topics="urban tactics" data-text="כניסה לבית רחפן סריקה מוקדמת מחבלים">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#9</span></div>
+          <div class="card-title">כניסה לבתים — סריקת רחפן לפני כל כניסה</div>
+          <div class="card-badges"><span class="badge pill-urban">לחימה עירונית</span><span class="badge pill-tactics">טקטיקה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            סרטון סיירת צנחנים בסג'עייה (4.7.24): "שימו לב איך תמיד בכניסה לבית הם שולחים רחפן לסריקה." וניתוח: "אין שום סיבה להכנס לבתים לפני סריקה עם רחפן."
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            כניסה ללא סריקה מוקדמת חושפת כוח למחבלים מסתתרים, מטענים ברהיטים/קירות, מארבים. הרחפן מספק מודיעין קריטי ב-30 שניות בלי לסכן חיילים.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            סריקת רחפן לפני כניסה לכל בית — נוהל חובה. אין "בית בטוח" ללא סריקה. הרחפן חוסך חיי לוחמים.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            לקבוע כנוהל בלתי-ניתן-לעקיפה: רחפן קודם, כניסה אחר כך. לדאוג לזמינות רחפן בכל מחלקה. לתרגל שגרת סריקה-לפני-כניסה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מידע 153 — סעיף 5: "סריקה מקדימה קפדנית, וכן יומיומית." סעיף 8: "שימוש ברחפן לסריקות מבחוץ."
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 4.7.24, יאיר ק. למידה 146:</div>
+            "סיירת צנחנים בסגעייה — שימו לב איך תמיד בכניסה לבית הם שולחים רחפן לסריקה. אין שום סיבה להכנס לבתים לפני סריקה עם רחפן."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="urban safety" data-text="דחפור מטען נפל שירשור תחקיר ציוד מגן סד'פ">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#10</span></div>
+          <div class="card-title">דחפור על מטען — עבודת סד"פ וציוד מגן מציל חיים</div>
+          <div class="card-badges"><span class="badge pill-urban">לחימה עירונית</span><span class="badge pill-safety">בטיחות</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            30.9.24, גדוד 184 חטיבה 14, נוסיראת: 4 דחפורי חישוף. בשעה 9:40 זוהה פגז נפל, נעשתה סריקה 360. בסיום הסריקה — נפל + מטען משורשר מתפוצץ מתחת לכף. הצוות עם ציוד מיגון מלא (ג'נטקסים, משקפי מגן, חולצות ומכנסי מפעיל). פציעות קלות בלבד.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            מטען שורשר לנפל — שיטת מיסוך מתוחכמת. הסריקה לא זיהתה את השירשור. ציוד מגן מלא הפחית נזק קריטי לחיי הצוות.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            "עבודה לפי סד'פים ותרגולות וכמובן עם ציוד מיגון מלא מצילה חיים." נפל קרוב לנתיב תנועה = חשד לשירשור. יש לעבוד בצמדי דחפורים.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            להקפיד על עבודת דחפורים בצמדים. ציוד מגן מלא — חובה. סריקות במרחק סביר. נפל קרוב לנתיב = עצור וחשוד בשירשור.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מבזק "איום המטענים פצן" (30.9.24). מידע 153 סעיף 6: "משיכת רהיטים חשודים ע'י חבל ועוגן חבלנים."
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 9.10.24, רס'ן אבי כודדה מ'פ גדוד 8163:</div>
+            "שוב אנחנו נוכחים לראות שעבודה לפי סד'פים ותרגולות וכמובן עם ציוד מיגון מלא מצילה חיים. יש להקפיד על עבודת דחפורים בצמדים, לבישת ציוד מגן וסריקות במרחק סביר מנקודות חשודות."
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: אתיקה ודיני לחימה -->
+<div class="topic-section" data-topic="ethics">
+  <div class="topic-header" onclick="toggleSection(this)">
+    <div class="topic-title"><span>⚖</span> אתיקה ודיני לחימה <span class="topic-count">2 לקחים</span></div>
+    <span class="topic-toggle">▾</span>
+  </div>
+  <div class="topic-body">
+    <div class="cards-grid">
+
+      <div class="lesson-card" data-topics="ethics intel" data-text="תושב עזתי מגן אדם ציוד תיעוד אל ג'זירה">
+        <div class="card-head">
+          <div class="card-num-row">
+            <span class="card-num">#11</span>
+            <span class="card-ethics-flag">⚠ אתיקה / דל"מ</span>
+          </div>
+          <div class="card-title">שימוש "במגן אדם" — חשיפה תקשורתית ועצמאות מבצעית</div>
+          <div class="card-badges"><span class="badge pill-ethics">אתיקה</span><span class="badge pill-intel">מודיעין</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            סרטון אל-ג'זירה (1.7.24): "קטעים בהם כוחות צה'ל מבצעים שימוש ב'תושב עזתי' לפתיחת שטח חדש וסריקת מבנים." הצילומים נאספו מציוד לוחמים שנפצעו ומכטב"מים שנפלו.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            ציוד תיעוד שנשלט ע"י האויב מאפשר חשיפת: מיקומי כוחות, שיטות סוואה, אמל"ח מיוחד, ופעולות בעייתיות מבחינת דל"מ — ששמשו תעמולה אסטרטגית.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            שמירה על ציוד תיעוד = משימה מבצעית. פעולות ב"אזורים אפורים" בדל"מ — אסורות לא רק משיקולי חוק, אלא גם משיקולים אסטרטגיים.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            לחדד: כל ציוד תיעוד שאובד הוא נשק מודיעיני. לתדרך על נהלי פעולה תחת מצלמות. מפקדים: לא לאשר פעולות שמפרות דל"מ גם תחת לחץ.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            כללי דל"מ — איסור שימוש במגנים אנושיים. כרך אתיקה צבאית — הגנה על אזרחים. ביטחון מידע ושמירת ציוד.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 1.7.24, יאיר ק. למידה 146:</div>
+            "הסרטונים מדגישים את החשיבות הרבה בשמירה על ציוד התיעוד שנמצא על הכוחות בשטח. התיעודים שנחשפים מאפשרים לאויב לזהות את מיקום הכוחות בשטחי התארגנות, צורות הסוואה, שימוש באמל'ח מיוחד ופרסום מידע מסווג."
+          </div>
+          <div class="ethics-warning">
+            <div class="ethics-warning-title">⚠ סימון אתי — ROE / דיני לחימה</div>
+            שימוש באזרחים לפתיחת שטח / סריקת מבנים מהווה שימוש פוטנציאלי במגן אנושי — איסור מפורש בדל"מ ובמשפט הבינלאומי ההומניטרי. יש לחקור, לתחקר ולוודא עמידה בנהלים.
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="ethics intel" data-text="סרטון חיזבאללה פגיעה הפצה תעמולה גבול למידה">
+        <div class="card-head">
+          <div class="card-num-row">
+            <span class="card-num">#12</span>
+            <span class="card-ethics-flag">⚠ אתיקה</span>
+          </div>
+          <div class="card-title">הפצת סרטוני אויב — גבול הלמידה והתעמולה</div>
+          <div class="card-badges"><span class="badge pill-ethics">אתיקה</span><span class="badge pill-intel">מודיעין</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            ויכוח בקבוצה (8.8.24): לאחר הפצת סרטון חזבאללה עם פגיעה בנגמ"ש, סמח"ט 228 שאל: "למה להפיץ סרטון כזה? חוץ מתעמולה של האויב וצער למשפחות — מה יש בו?"
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            סרטוני אויב עם פגיעות יכולים לשמש ללמידה מבצעית אך גם פוגעים במורל ומשמשים תעמולה. ללא ניתוח — ההפצה היא ביזיון ולא למידה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            כל סרטון אויב חייב להגיע עם שאלות הנחיה או ניתוח מפורש. ללא ניתוח — זוהי הפצת תעמולה, לא למידה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            כל שיתוף סרטון אויב: 1. לוודא שאין מספרי יחידות/מיקומים. 2. לצרף שאלות לחשיבה. 3. לא להפיץ פגיעות ללא ניתוח. 4. לזכור: הקבוצה מושמעת לחיילים.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            כרך אתיקה — כבוד לנפגעים ולמשפחותיהם. נהלי הפצת מידע בערוצים לא-מסווגים. מדיניות ביטחון מידע.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 8.8.24, יקיר שגב סמח'ט 228:</div>
+            "ומיכוון שזו קבוצת למידה, ולא קבוצת רכילות, אנא העבירו רק סרטונים רלוונטיים. בטח כשרואים בהם פגיעות בחיילים."
+          </div>
+          <div class="ethics-warning">
+            <div class="ethics-warning-title">⚠ סימון אתי — כבוד לנפגעים</div>
+            הפצת סרטוני פגיעה בחיילים ללא אישור ותחקיר עלולה לפגוע בכבוד הנפגעים ובמשפחותיהם. יש לוודא אישור לפני הפצה.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: מודיעין -->
+<div class="topic-section" data-topic="intel">
+  <div class="topic-header" onclick="toggleSection(this)">
+    <div class="topic-title"><span>🔍</span> מודיעין ומצב שטח <span class="topic-count">6 לקחים</span></div>
+    <span class="topic-toggle">▾</span>
+  </div>
+  <div class="topic-body">
+    <div class="cards-grid">
+
+      <div class="lesson-card" data-topics="intel prep" data-text="חל'כ זיהוי שגוי התראות שווא פאניקה חטיבות">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#13</span></div>
+          <div class="card-title">זיהוי שגוי חל"כ — 6 מקרים, חטיבות שלמות בפאניקה</div>
+          <div class="card-badges"><span class="badge pill-intel">מודיעין</span><span class="badge pill-prep">הכנה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            (15.10.24): "מדי יום מתקבלות התראות שווא על הימצאות חל'כ בשטח! בימים האחרונים — 6 מקרים של זיהוי כחל'כ, העברת דיווח והכנסה של חטיבות שלמות לפאניקה."
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            כשל בהכרת מאפייני כלי רכב/ציוד אויב לעומת שלנו. לחץ מבצעי גורם לדיווח מהיר ללא אימות. ידע "אמצעים חריגים בפצן" לא הופץ מספיק.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            לפני דיווח חל"כ — לאמת מול "אמצעים אשר נראים חריגים בפצן." כוחות חייבים להכיר אמצעי אויב ואמצעינו.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            להפיץ מסמך "אמצעים אשר נראים חריגים בפצן" לכל גורם. לכלול בתדרוך זיהוי כלי רכב. להטמיע: "מאמת לפני מדווח."
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מסמך "אמצעים אשר נראים חריגים בפצן" (15.10.24). מידעון אמל"ח צפוני. נהלי זיהוי ודיווח כוחות.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 15.10.24, יאיר ק. למידה 146:</div>
+            "מדי יום מתקבלות התראות שווא עד לרמת מפקדים בכירים שמקבלים מידע שגוי על הימצאות חל'כ בשטח! בימים האחרונים 6 מקרים של זיהוי כחל'כ, העברת דיווח והכנסה של חטיבות שלמות לפאניקה."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="intel urban" data-text="מטענים חזבאללה לבנון שדה מטענים 400 מטר שלט רחוק">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#14</span></div>
+          <div class="card-title">שיטות מטענים חזבאללה — שדה מטענים ושלט-רחוק</div>
+          <div class="card-badges"><span class="badge pill-intel">מודיעין</span><span class="badge pill-urban">לחימה עירונית</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            יאיר ק. למידה (28.9.24): "לא מדובר במטען ממוקד, אלא ב'שדה מטענים' שלם — כ-400 מטרים לאורך נתיב תנועה. מטעני-רסס כיווניים (כלימגור). הופעל בלילה עם ראיית תרמית. שלט-רחוק בשתי פעימות."
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            חזבאללה מפעיל שיטות מתוחכמות: שדות מטענים (לא מטען בודד), ראיית תרמית, שלט-רחוק רב-פעימות. מעבר מעזה ללבנון מחייב הגברת מודעות לשיטות שונות.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            בתמרון בלבנון: להניח שדה מטענים, לא מטען בודד. לחדש נהלי בדיקה קדם-תנועה לאורך לפחות 400 מ'. לזכור: ראיית תרמית לילית — האויב רואה אותנו.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            להעביר מבזק "איום המטענים פצן" + סרטון חיל ההנדסה (אוקטובר 2024) לכל הכוחות. לכלול בתדריך: שיטות הסוואה, הפעלה, ראיית תרמית.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מבזק "איום המטענים פצן" (30.9.24). סרטון חיל הנדסה קרבית — איום מטענים בלבנון (10.2024). מסמך "מעזה ללבנון — טקטיקה לשליחה."
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 28.9.24, יאיר ק. למידה 146:</div>
+            "לא מדובר ב'מטען' או אפילו 'זירת מטענים' ממוקד, אלא ב'שדה מטענים' שלם. הם פיזרו מטענים על-פני כ-400 מטרים לאורך נתיב תנועה... האירוע קרה בלילה (יש להם ראייה תרמית ארוכת-טווח) והזירה הופעלה בשלט-רחוק בשתי פעימות."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="intel tactics" data-text="קורנט נ'ט בניין שיגור ממבנה חיזבאללה לבנון הנחה שגויה עירוני">
+        <div class="card-head">
+          <div class="card-num-row">
+            <span class="card-num">#23</span>
+            <span class="card-osint-flag">OSINT</span>
+          </div>
+          <div class="card-title">קורנט שוגר מתוך מבנה — ההנחה ש"לא ניתן" שגויה</div>
+          <div class="card-badges"><span class="badge pill-intel">מודיעין</span><span class="badge pill-tactics">טקטיקה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            8.7.24: סרטון של חיזבאללה מלבנון מציג שיגור טיל קורנט נ"ט מתוך מבנה. הסרטון שותף ללמידה מבצעית כדי לסתור את הטענה הנפוצה ש"לא ניתן לשגר נ"ט ממבנה."
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            קיימת הנחה שגויה בשטח ש"מבנה" מהווה מחסום פיזי לשיגור נ"ט. בפועל, בתנאים מסוימים (מבנה מותאם, פתחים מספיקים) שיגור ממבנה אפשרי. הנחה שגויה זו עלולה לגרום לזלזול בסיכון.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            אל תניח ש"מבנה = הגנה מנ"ט". חיזבאללה מסוגל ומשגר נ"ט ממבנים מותאמים. לא לנוע ל"צל" של מבנה כמחסה מנ"ט ללא בדיקה וסריקה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            (1) לתדרך: שיגור נ"ט ממבנה — אפשרי ומתועד. (2) לפנות מבנים לפני תנועה בקרבתם. (3) לא להשתמש במבנה כ"מחסה" מנ"ט ללא סריקה. (4) לעדכן הנחות מוצא בהכנת מסלול.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מידע 153 — מענה נ"ט ממבנה. מידעון אמל"ח צפוני — איום קורנט. כרך לחימה בשטח בנוי.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 8.7.24, יאיר ק. למידה 146:</div>
+            "שיגור קורנט מבית (לבנון). הדגמה שאכן אפשר לשגר נ״ט ממבנה (אם הוא מתאים / הותאם) למרות טענות הפוכות שנשמעות מדי פעם"
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="intel tactics" data-text="חיזבאללה לבוש טקטי מסתנן גדר הגנה גבול זיהוי כוחות">
+        <div class="card-head">
+          <div class="card-num-row">
+            <span class="card-num">#24</span>
+            <span class="card-osint-flag">OSINT</span>
+          </div>
+          <div class="card-title">מחבלי חיזבאללה בלבוש טקטי — נראים כחיילינו</div>
+          <div class="card-badges"><span class="badge pill-intel">מודיעין</span><span class="badge pill-tactics">טקטיקה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            15.9.24, מרחב ציפורן (גזרה 91): תא חיזבאללה התקרב לגדר בלילה לניסיון הנחת מטענים. לבוש: ציוד טקטי הדומה לשלנו, ללא ווסטים, חמושים, תיקי גב קטנים. כוח זיהה, פתח באש — 2 הרוגים, 1 ברח. דווח במקו ניוז (19.9.24).
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            חיזבאללה מסתגל — שימוש בלבוש טקטי הדומה לשלנו כדי להאט זיהוי ראשוני. גישה לגדר בלילה בקבוצה קטנה עם תיקים קטנים — לא נראית כ"כוח לחימה" קלאסי.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            לבוש טקטי ≠ כוח ידידותי. זיהוי חיובי מחייב יותר ממראה החייל. ערנות גבוהה בשעות הלילה על ציר הגדר — כולל לגורמים בלבוש טקטי.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            (1) לתדרך: לבוש טקטי אינו מאפשר זיהוי חיובי ידידותי. (2) נוהל זיהוי כוחות גדר — לא להסתמך על מראה לבד. (3) ערנות לילה — כולל ריכוז קטן עם תיקים קטנים.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מקו ניוז (19.9.24). נוהל זיהוי כוחות עצמיים בגדר. נהלי ערנות לילה במוצב גבול.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 19.9.24, +972 53-774-1185:</div>
+            "התקרבו ממש עד הגדר. לבוש טקטי שדומה לשלנו. חמושים, בלי ווסטים, תיקי גב של ילדים"
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="intel" data-text="יוניפ'ל אונ'א כוחות תנועה דיווח פומבי OPSEC מידע פתוח X טוויטר">
+        <div class="card-head">
+          <div class="card-num-row">
+            <span class="card-num">#25</span>
+            <span class="card-osint-flag">OSINT</span>
+          </div>
+          <div class="card-title">יוניפ"ל מדווח על תנועות כוחות — האויב צופה בחשבון ה-X</div>
+          <div class="card-badges"><span class="badge pill-intel">מודיעין</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            13.10.24: יוניפ"ל (כוח השלום של האו"ם בלבנון) החל לפרסם בחשבון ה-X הרשמי שלו (@UNIFIL_) דיווחים על תנועות כוחות צה"ל — מידע שהאויב יכול לנצל. הדבר נצפה ודווח בקבוצה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            יוניפ"ל פרוס בגזרה ורואה תנועות כוחותינו. פרסומים פומביים שלהם — מקור OSINT (מודיעין פתוח) חופשי לחיזבאללה ולגורמים עוינים. הצד שלנו לא שלט במידע שיוניפ"ל מפרסם.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            OSINT עובד לשני הכיוונים. גוף שלישי שצופה בתנועותינו ומפרסם — איום OPSEC אמיתי. יש לתכנן תנועות תוך התחשבות בנוכחות יוניפ"ל.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            (1) לזהות ולמפות עמדות יוניפ"ל בגזרה. (2) לתכנן תנועות מחוץ לשדה הראייה שלהם בכל הניתן. (3) לעקוב אחרי @UNIFIL_ ב-X כמדד ל-OPSEC של הכוח.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            חשבון X: @UNIFIL_ — ציוץ מ-13.10.24. כרך ביטחון מידע וביטחון שדה.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 13.10.24, יאיר ק. למידה 146:</div>
+            "אני מניח שזה לא קטע חדש אבל יוניפ'ל התחילו לדווח על תנועת הכוחות שלנו... ככה האויב גם לומד עלינו לפעמים.."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="intel tactics" data-text="אלמאאס טיל נ'ט הנדסה פצועים אחד עשר חטיבה 6 לבנה">
+        <div class="card-head">
+          <div class="card-num-row">
+            <span class="card-num">#26</span>
+            <span class="card-osint-flag">OSINT</span>
+          </div>
+          <div class="card-title">2 טילי אלמאס על כוח הנדסה — 11 פצועים (חטיבה 6)</div>
+          <div class="card-badges"><span class="badge pill-intel">מודיעין</span><span class="badge pill-tactics">טקטיקה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            22.10.24: חיזבאללה פרסם סרטון של ירי 2 טילי אלמאס לעבר כוח צה"ל הכולל אמצעי הנדסה, בקרבת מוצב לבנה (חטיבה 6). 11 פצועים. התא המבצע חוסל אותו יום.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            כוחות הנדסה, עסוקים בפעולה מבצעית (חפירה/סלילה), נחשפים לאיום נ"ט — פחות ערניים לאיום ופחות מוגנים מאשר שריון. האויב מכוון לאמצעי הנדסה בעלי ערך גבוה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            כוחות הנדסה פועלים בסביבה מאוימת כמו שריון — ויש להחיל עליהם אותו משטר: זמני חשיפה, כיסויים, תצפיות, ציוד מגן מלא.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            (1) לתדרך כוחות הנדסה על איום נ"ט — כמו שריון. (2) לשבץ כיסוי תצפית/ירי בזמן פעולת הנדסה. (3) ציוד מגן מלא — חובה גם בפעולה הנדסית. (4) לבצע סריקת רחפן לפני פעולה בשטח.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            סרטון חיל הנדסה קרבית — איום מטענים בלבנון (10.2024). מבזק "איום המטענים פצן". נוהל כיסוי כוחות הנדסה.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 22.10.24, יאיר ק. למידה 146:</div>
+            "סרטון חזבאללה המציג לדבריהם אירוע ירי של 2 טילי אלמאאס לעבר כוח צה'ל, הכולל אמתעי הנדסה, בקרבת מוצב לבנה. אירוע בחטיבה 6. 11 פצועים."
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: טכנולוגיה -->
+<div class="topic-section" data-topic="tech">
+  <div class="topic-header" onclick="toggleSection(this)">
+    <div class="topic-title"><span>⚙</span> טכנולוגיה ומערכות <span class="topic-count">4 לקחים</span></div>
+    <span class="topic-toggle">▾</span>
+  </div>
+  <div class="topic-body">
+    <div class="cards-grid">
+
+      <div class="lesson-card" data-topics="tech safety" data-text="רחפן FPV מתאבד לא לתפוס ביד פיצוץ אוקראינה">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#15</span></div>
+          <div class="card-title">רחפן FPV — לא לתפוס, להתרחק ולדווח</div>
+          <div class="card-badges"><span class="badge pill-tech">טכנולוגיה</span><span class="badge pill-safety">בטיחות</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            לימוד מגזרת אוקראינה (9.9.24): חייל תפס רחפן ביד — הרחפן התפוצץ אחרי כמה שניות. כמו כן: רחפן FPV הפיל מסוק רוסי מדגם מי-28 (7.8.24); מסוק שני הופל בהמשך.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            רחפן FPV שנראה "תקוע" עשוי לפעול על ראיית מכונה — ללא תקשורת עם מפעיל. תפיסה ידנית = אחיזת מטען נפץ. האיום הולך וגדל: 100,000+ רחפני FPV פעילים מדי חודש.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            כל רחפן קרוב = מטען פוטנציאלי. לא לתפוס, לא לקרב, להתרחק ולדווח. מדפים סגורים — הגנה יעילה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            לתדרך: מדפים סגורים. לא לתפוס רחפנים בשום מצב. לבצע נוהל ריחוק מרחפן. להכשיר לזיהוי סוגי רחפנים (FPV, משוטט, צילום).
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            "חשיבות כניסה לאזור מוגן / תפיסת מחסה יעיל" (30.9.24). מידעון אמל"ח צפוני. נוהל טיפול בכטב"מ עוין.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 9.9.24, למידה מבצעית אבי 9308:</div>
+            "לימוד מגזרת אוקראינה: חייל בורח מרחפן ולאחר מכן תופס אותו בידיים... הרחפן התפוצץ אחרי כמה שניות. בקיצור, לא לתפוס רחפנים."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="tech tactics" data-text="מדפים סגורים כטב'ם משוטט השמדה עמדה">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#16</span></div>
+          <div class="card-title">מדפים סגורים — ההגנה הפשוטה מכטב"מים</div>
+          <div class="card-badges"><span class="badge pill-tech">טכנולוגיה</span><span class="badge pill-tactics">טקטיקה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            22.3.26 — פגיעת כטב"מים (משוטטים) בגדודים 77 ו-12 באזור א-טייבה. פגיעה בתותח ובכוונות, ללא נפגעים. תגובה (27.3.26): "מדפים סגורים!!!"
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            כטב"מים משוטטים מכוונים לאמצעים טכניים חשופים. מדפים פתוחים מגדילים שטח חתך. הגנה פסיבית (סגירת מדפים) יכולה למנוע נזק קריטי.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            מדפים סגורים = הגנה ישירה מפגיעת כטב"מים. יש להכשיר לזיהוי הבדל: FPV (נזק קטן) לעומת טיל נ"ט (נזק גדול).
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            לקבוע כנוהל: מדפים סגורים בכל עמדה. להכשיר לזיהוי: משוטט vs FPV vs טיל. לצמצם חשיפת אמצעים טכניים.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            עשרות פרסומי חזבאללה על תקיפות אמצעי איסוף (2024-2026). מדריך הגנה מכטב"מים. נוהל שמירת פנים וסגירת מדפים.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 27.3.26, +972 52-925-1129:</div>
+            "מדפים סגורים !!!"
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="tech" data-text="רחפן יירוט FPV כטבם נגד רחפן ניסוי הצלחה שלם נגד-רחפן">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#27</span></div>
+          <div class="card-title">FPV מיירט FPV — ניסוי מוצלח ראשון, המיירט נשאר שלם</div>
+          <div class="card-badges"><span class="badge pill-tech">טכנולוגיה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            13.12.24: דווח על ניסוי מוצלח ראשון של יירוט כטב"מ אויב באמצעות רחפן FPV צה"לי — והמיירט נשאר שלם לאחר היירוט. פריצת דרך ביכולת הגנה אקטיבית מרחפנים ברמה הטקטית.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            מערכות יירוט קיימות יקרות ולא תמיד זמינות לדרגים טקטיים. שימוש ב-FPV זמין כמיירט — מספק פתרון בעלות נמוכה ותגובה מהירה לאיום כטב"מ בשטח.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            FPV יכול לשמש הן לתקיפה והן להגנה. יירוט FPV-על-FPV — שיטה אפשרית בעלות נמוכה לדרג הטקטי. יש לפתח ולהכשיר על יכולת זו.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            לעקוב אחרי פיתוח יכולת FPV-על-FPV. לשקול: הקצאת FPV ייעודי להגנה בנוסף לתקיפה. לפתח נוהל יירוט רחפן ברמת מחלקה/פלוגה.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מדריך הגנה מכטב"מים. "חשיבות כניסה לאזור מוגן" (30.9.24). נוהל טיפול בכטב"מ עוין.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 13.12.24, יאיר ק. למידה 146:</div>
+            "ניסוי מוצלח ראשון של יירוט כטבם באמצעות Fpv שאפילו נשאר שלם"
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="tech tactics" data-text="מעיל רוח trophy לא הופעל נמר טנק אלמאס מקשנ'ר שגיאת מודיעין">
+        <div class="card-head">
+          <div class="card-num-row">
+            <span class="card-num">#28</span>
+            <span class="card-osint-flag">OSINT</span>
+          </div>
+          <div class="card-title">מעיל רוח לא הופעל — שני אירועים ושגיאת מקשנ"ר</div>
+          <div class="card-badges"><span class="badge pill-tech">טכנולוגיה</span><span class="badge pill-tactics">טקטיקה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            3.3.26: ירי נ"ט על נמ"ר ריק (גזרה 769) ועל טנק בא-סאביח — בשני המקרים מעיל רוח לא הופעל. הטנק: הטיל הוסט ע"י די-9; הצוות היה מחוץ לטנק ונפגע מרסיסים. מקשנ"ר דיווח בטעות ש"הופעל מעיל רוח."
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            (1) צוות מחוץ לרכב = מעיל רוח לא פועל. (2) מקשנ"ר פרסם מידע שגוי שלא תאם עדות הצוות. (3) הסתמכות על די-9 בלבד כהגנה — לא מספקת.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            מעיל רוח חייב להיות מופעל לפני כל משימה. צוות מחוץ לרכב = ללא הגנה אקטיבית. דיווחי מקשנ"ר בזמן אמת עלולים להיות שגויים — לאמת מול הצוות ישירות.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            (1) לוודא הפעלת מעיל רוח לפני כל יציאה. (2) לא לשהות מחוץ לרכב בסביבה מאוימת. (3) לאמת דיווחי מקשנ"ר מול עדות ישירה לפני הסקת מסקנות. (4) לא להסתמך על די-9 כתחליף למעיל רוח.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            נוהל הפעלת מעיל רוח לפני משימה. נהלי אימות מידע מקשנ"ר. מאפייני מערכות הגנה פסיביות (די-9) ואקטיביות (מעיל רוח).
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 5.3.26, יאיר ק. למידה 146:</div>
+            "בשני המקרים לא הופעלו מעיל רוח. בירי על הנמר הטיל פגע נמוך. מקשנ'ר שאבו את המידע וקבעו שהופעל מעיל רוח. הצוות היה מחוץ לטנק ונפגע מרסיסים"
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: כושר קרבי ועזרה ראשונה -->
+<div class="topic-section" data-topic="medical">
+  <div class="topic-header" onclick="toggleSection(this)">
+    <div class="topic-title"><span>🏥</span> כושר קרבי ועזרה ראשונה <span class="topic-count">2 לקחים</span></div>
+    <span class="topic-toggle">▾</span>
+  </div>
+  <div class="topic-body">
+    <div class="cards-grid">
+
+      <div class="lesson-card" data-topics="medical tactics" data-text="שרידות כח care under fire עליונות באש פצועים">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#17</span></div>
+          <div class="card-title">שרידות כח — עליונות באש לפני טיפול בפצועים</div>
+          <div class="card-badges"><span class="badge pill-medical">רפואה</span><span class="badge pill-tactics">טקטיקה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            לקחי רפואה מתחקיר אגוז (7.10.24): "שרידות הכח — התנהלות לא נכונה. ריצה לטפל בפצועים לפני שהושגה עליונות באש."
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            תגובה רגשית מיידית לפצוע היא אינסטינקטיבית אך מסוכנת. טיפול בפצועים לפני עליונות = חשיפת עוד לוחמים = יותר נפגעים.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            Care Under Fire: עליונות באש ראשונה, פינוי אחר כך. לא לרוץ לפצוע כשהאויב פעיל. פינוי תחת אש = שני נפגעים במקום אחד.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            לכלול Care Under Fire בכל אימון רפואה מבצעית. לפרסם דף לקחים לכל חובש קרבי. לקשר לקמפוס הדיגיטלי ולמדיקבוק.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            ספר הטראומה והרפואה המבצעית — פרק Care Under Fire. מקבץ לקחים אירוע רב נפגעים בבסיס עורפי (23.10.24). קמפוס דיגיטלי ומדיקבוק.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 7.10.24, יאיר ק. למידה 146:</div>
+            "לקחי רפואה רלוונטים ללוחמים מתחקיר אגוז — שרידות הכח: התנהלות לא נכונה. ריצה לטפל בפצועים לפני שהושגה עליונות באש."
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-card" data-topics="medical safety" data-text="מכת חום קלאסית קיץ גל חום עומס פגיעה הצלה פיזיולוגיה">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#29</span></div>
+          <div class="card-title">מכות חום קיץ 2024 — גם ללא מאמץ, גם בשמירה</div>
+          <div class="card-badges"><span class="badge pill-medical">רפואה</span><span class="badge pill-safety">בטיחות</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            3.7.24: ענף פיזיולוגיה במקרפ"ר הפיץ שני מבזקים: (א) מצבר מקרים של פגיעות חום קיץ 2024. (ב) מודעות ל"מכת חום קלאסית בגל חום" — מקרים שאינם קשורים למאמץ פיזי, בקרב אוכלוסייה שאינה ספורטיבית כלל.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            מכת חום "קלאסית" — נגרמת ע"י חשיפה לסביבה חמה גם ללא פעילות גופנית — פחות מוכרת מ"מכת חום מאמץ". חיילים בעמדה/שמירה (לא פעילים) נמצאים בסיכון שאינו מוכר להם.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            גם ישיבה בחום קיצוני ללא מאמץ — מסוכנת. שני סוגי מכת חום: (א) מאמץ — בזמן פעילות, (ב) קלאסית — בחשיפה לחום. שניהם קטלניים ודורשים טיפול מיידי.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            (1) להפיץ מבזקי חום לכל יחידה. (2) לכלול זיהוי מכת חום קלאסית בתדריך יומי בגל חום. (3) להבטיח גישה לצל ומים בעמדות שמירה. (4) לזהות: חום גבוה + עור אדום/יבש/בלבול = חירום רפואי.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            מבזק "למידה ממקרי פגיעות ומכות חום קיץ 24" (3.7.24). מבזק "מכת חום קלאסית בגל חום" (3.7.24). פרוטוקול REC — קירור חירום בשטח.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 3.7.24, יאיר ק. למידה 146:</div>
+            "עקב מספר פגיעות ומכות החום בתקופה האחרונה לצד ההכבדה בעומסי החום וגלי החום, מצורפות שתי אגרות מטעם ענף פיזיולוגיה במקרפ״ר: 1. למידה מצבר מקרים. 2. העלאת מודעות למכת חום 'קלאסית' עקב מספר מקרים שארעו בחודש האחרון."
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SECTION: הכנה ותדרוך -->
+<div class="topic-section" data-topic="prep">
+  <div class="topic-header" onclick="toggleSection(this)">
+    <div class="topic-title"><span>📋</span> הכנה ותדרוך <span class="topic-count">1 לקח</span></div>
+    <span class="topic-toggle">▾</span>
+  </div>
+  <div class="topic-body">
+    <div class="cards-grid">
+
+      <div class="lesson-card" data-topics="prep tactics" data-text="חטיפת נשק רמדאן קרב מגע ערנות הפסקות מנהלה">
+        <div class="card-head">
+          <div class="card-num-row"><span class="card-num">#18</span></div>
+          <div class="card-title">ניסיון חטיפת נשק — ערנות גם בהפסקות ומנהלות</div>
+          <div class="card-badges"><span class="badge pill-prep">הכנה</span><span class="badge pill-tactics">טקטיקה</span></div>
+        </div>
+        <button class="card-expand-btn" onclick="toggleChain(this)">הצג שרשרת לוגית ▾</button>
+        <div class="chain">
+          <div class="chain-step step-obs">
+            <div class="chain-step-label">תצפית — מה קרה</div>
+            19.2.25, תחנת דלק פז כפר קרע: לוחמי מג"ב עצרו להתרעננות. מחבל (בן 20, חברון) התנפל על לוחם וניסה לחטוף נשקו. הלוחם הדף — חברי הצוות השתלטו.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-analysis">
+            <div class="chain-step-label">ניתוח — הגורם שורש</div>
+            רמדאן — עלייה בפיגועי השראה ומחבלים בודדים. הפסקות יוצרות "ביטחון שגוי" שמפחית ערנות. חיילים חמושים בהפסקה = מטרה אטרקטיבית למחבל שמחפש נשק.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-conclusion">
+            <div class="chain-step-label">מסקנה — הלקח</div>
+            ערנות מבצעית חלה גם בהפסקות ובמנהלות. אימוני קרב מגע — חיוניים. יש להאמין לאיומים ולהיות מוכנים לתגובה מיידית גם מחוץ לסדר קרב מלא.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-apply">
+            <div class="chain-step-label">יישום — מי עושה מה</div>
+            1. לתדרך: ערנות גם בהפסקות. 2. לתגבר אימוני קרב מגע — מאבק ונטרול מחבל. 3. תדרוך לקראת רמדאן: פיגועי השראה. 4. להאמין לאיומים.
+          </div>
+          <div class="chain-arrow">↓</div>
+          <div class="chain-step step-protocol">
+            <div class="chain-step-label">קישור לפרוטוקול</div>
+            פרסום גדוד מנשה (19.2.25): "רמדאן בפתח — מזמין רצף פיגועי השראה וחקיינות של המחבל הבודד." נוהל אבטחה אישית בפעילות שגרתית.
+          </div>
+          <div class="source-quote">
+            <div class="source-quote-label">ציטוט מקורי | 19.2.25, יאיר ק. למידה 146:</div>
+            "חשוב שלוחמנו יהיו מודעים וימשיכו להיות חדים ומוכנים גם בהפסקות ובמנהלות. חשיבות אימוני הקרב מגע — מאבק ונטרול מחבל. להאמין לאיומים!!"
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- SOURCES -->
+<div class="sources-section">
+  <h2>מקורות — מסמכי עזר ומקורות OSINT שהופצו בקבוצה</h2>
+
+  <div class="source-doc">
+    <h3>מבזק למידה ממקרי פגיעות ומכות חום קיץ 24 — ענף פיזיולוגיה, מקרפ"ר</h3>
+    <p>הופץ: 3.7.24 | קובץ: <em>מבזק למידה ממקרי פגיעות ומכות חום קיץ 24.pdf</em></p>
+    <ul>
+      <li>ניתוח מצבר מקרים של פגיעות חום בתקופת הקיץ</li>
+      <li>הפנה לנקיטת משנה זהירות לאור ריבוי מקרים והכבדה בעומסי חום</li>
+      <li>הופץ לרקע גלי חום ופגיעות מרובות בכוחות בשטח</li>
+    </ul>
+  </div>
+
+  <div class="source-doc">
+    <h3>מבזק חם יולי 24 — מכת חום קלאסית בגל חום — ענף פיזיולוגיה, מקרפ"ר</h3>
+    <p>הופץ: 3.7.24 | קובץ: <em>מבזק חם יולי 24 - מכת חום קלאסית בגל חום.pdf</em></p>
+    <ul>
+      <li>העלאת מודעות למכת חום "קלאסית" — לא רק הקשורה למאמץ פיזי</li>
+      <li>מספר מקרים שארעו בחודש האחרון בקרב אוכלוסיה שאינה פעילה ספורטיבית</li>
+      <li>כלים לזיהוי וטיפול מוקדם</li>
+    </ul>
+  </div>
+
+  <div class="source-doc">
+    <h3>איום המטענים פצן — מבזק מקצועי (בוצע ואושר ע"י יהל"ם)</h3>
+    <p>הופץ: 30.9.24 | קובץ: <em>איום המטענים פצן.pdf</em></p>
+    <ul>
+      <li>סוגי מטענים ואמצעי הסוואה שנתקלו בהם הכוחות</li>
+      <li>אופן פריסת מערכת חבלה חוטית בשטח</li>
+      <li>הכשרה לזיהוי אמצעים חריגים בשטח לבנוני ועזתי</li>
+    </ul>
+  </div>
+
+  <div class="source-doc">
+    <h3>מידע 153 — איומים על בית-בהגנה והצעת מענה</h3>
+    <p>הופץ: 8.7.24 | מחבר: אלעד לוי | קובץ: <em>מידע 153 - איומים על בית-בהגנה והצעת מענה.docx</em></p>
+    <ul>
+      <li><strong>10 איומים מרכזיים:</strong> פצמ"ר על גג, צלף, נ"ט לקיר חיצון, חדירה מבחוץ/מרתף, מטען ברהיטים/קירות, שריפה, קריסת מבנה, מנהרות</li>
+      <li>לכל איום — הצעת מענה מפורטת</li>
+      <li>מינוי קצין בחו"ם לבקרת חשיפה ואבטחה הדדית</li>
+      <li>שימוש ברחפן לסריקות חיצוניות; נשיאת ציוד מגן על גגות ומרפסות</li>
+    </ul>
+  </div>
+
+  <div class="source-doc" style="border-left: 3px solid var(--success);">
+    <h3>🌐 OSINT — The New Yorker: "Will Hezbollah and Israel Go to War?" (דקסטר פילקינס)</h3>
+    <p>הופץ: 22.7.24 | מקור: The New Yorker (29.7.24) | כותב: Dexter Filkins</p>
+    <ul>
+      <li>כתב ערך בשטח — בגזרת חטיבה 300 (צד ישראלי) ובהמשך בצד הלבנוני</li>
+      <li>ניתוח עומק מנקודת מבט דו-צדדית לפני פרוץ מלחמת לבנון השנייה</li>
+      <li>רלוונטי להבנת מצב הרוח, הכוחות והמוכנות משני צידי הגבול</li>
+    </ul>
+  </div>
+
+  <div class="source-doc" style="border-left: 3px solid var(--success);">
+    <h3>🌐 OSINT — @UNIFIL_ (יוניפ"ל X/Twitter) — דיווחי תנועות כוחות</h3>
+    <p>זוהה: 13.10.24 | מקור: חשבון X רשמי @UNIFIL_</p>
+    <ul>
+      <li>יוניפ"ל פרסם בפומבי מידע על תנועות כוחות צה"ל — מקור OSINT חופשי לאויב</li>
+      <li>לקח: תנועות בשדה ראיית יוניפ"ל הן מידע פתוח — לתכנן בהתאם</li>
+    </ul>
+  </div>
+
+  <div class="source-doc" style="border-left: 3px solid var(--success);">
+    <h3>🌐 OSINT — @presamiga (X/Twitter) — חייל אוקראיני תופס רחפן FPV</h3>
+    <p>הופץ: 9.9.24 | מקור: X/Twitter — תיעוד מגזרת אוקראינה</p>
+    <ul>
+      <li>חייל תפס רחפן FPV ביד — הרחפן התפוצץ שניות לאחר מכן</li>
+      <li>לקח: לא לתפוס רחפנים בידיים. FPV יכול לפעול על ראיית מכונה ללא מפעיל פעיל</li>
+    </ul>
+  </div>
+
+  <div class="source-doc" style="border-left: 3px solid var(--success);">
+    <h3>🌐 OSINT — מקו ניוז: ניסיון הנחת מטענים בגדר (ציפורן, 15.9.24)</h3>
+    <p>הופץ: 19.9.24 | מקור: אתר מקו (Mako)</p>
+    <ul>
+      <li>כיסוי תקשורתי של ניסיון חדירה בלבוש טקטי הדומה לצה"ל</li>
+      <li>לקח: אישור לזהות תוקף מול הופעה חיצונית — גם בלבוש טקטי</li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+<footer>
+  נוצר על ידי <span>Claude Code</span> | למידה והדרכה 146 | <span>29.03.2026</span>
+</footer>
+
+<script>
+function toggleSection(headerEl) {
+  const body = headerEl.nextElementSibling;
+  const toggle = headerEl.querySelector('.topic-toggle');
+  if (body.classList.contains('collapsed')) {
+    body.classList.remove('collapsed');
+    toggle.style.transform = 'rotate(0deg)';
+  } else {
+    body.classList.add('collapsed');
+    toggle.style.transform = 'rotate(-90deg)';
+  }
+}
+
+function toggleChain(btn) {
+  const chain = btn.nextElementSibling;
+  if (chain.classList.contains('open')) {
+    chain.classList.remove('open');
+    btn.textContent = 'הצג שרשרת לוגית ▾';
+  } else {
+    chain.classList.add('open');
+    btn.textContent = 'הסתר שרשרת לוגית ▴';
+  }
+}
+
+document.querySelectorAll('.pill[data-topic]').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('.pill[data-topic]').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+    const topic = pill.dataset.topic;
+    document.querySelectorAll('.topic-section').forEach(sec => {
+      sec.style.display = (topic === 'all' || sec.dataset.topic === topic) ? '' : 'none';
+    });
+    checkNoResults();
+  });
+});
+
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q) {
+    document.querySelectorAll('.lesson-card').forEach(c => c.classList.remove('hidden'));
+    document.querySelectorAll('.topic-section').forEach(s => s.style.display = '');
+    checkNoResults();
+    return;
+  }
+  document.querySelectorAll('.pill[data-topic]').forEach(p => p.classList.remove('active'));
+  document.querySelector('.pill[data-topic="all"]').classList.add('active');
+  document.querySelectorAll('.topic-section').forEach(sec => {
+    sec.style.display = '';
+    let anyVisible = false;
+    sec.querySelectorAll('.lesson-card').forEach(card => {
+      const haystack = (card.dataset.text + ' ' + card.textContent).toLowerCase();
+      if (haystack.includes(q)) {
+        card.classList.remove('hidden');
+        anyVisible = true;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    if (!anyVisible) sec.style.display = 'none';
+  });
+  checkNoResults();
+});
+
+function checkNoResults() {
+  const anyVisible = [...document.querySelectorAll('.topic-section')].some(s => s.style.display !== 'none');
+  document.getElementById('noResults').classList.toggle('show', !anyVisible);
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+});
+</script>
+</body>
+</html>
